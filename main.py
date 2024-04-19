@@ -4,13 +4,25 @@ For GPU enabled computation, install pytorch in the venv from:
 https://pytorch.org/get-started/locally/
 """
 
+import logging
 import pdb
+import warnings
 
 import torch
 import torchvision
 
 from torch import nn
 from torch.utils.data import DataLoader
+from tqdm import tqdm
+
+
+warnings.simplefilter("ignore")
+logging.basicConfig(
+    filename="logging.log",
+    filemode="w",
+    format="%(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
+)
 
 
 class NN(nn.Module):
@@ -40,18 +52,6 @@ class NN(nn.Module):
             target_transform=target_transform,
         )
         self.flatten = nn.Flatten()
-        self.linear_reLU_stack = nn.Sequential(
-            nn.Linear(28 * 28, 512),
-            nn.ReLU(),
-            nn.Linear(512, 512),
-            nn.ReLU(),
-            nn.Linear(512, 10),
-        )
-
-    def forward(self, x):
-        x = self.flatten(x)
-        logits = self.linear_reLU_stack(x)
-        return logits
 
     def get_dataloader(self, train: bool = True, batch_size: int = 64):
         data_ = self.training_data if train else self.test_data
@@ -73,11 +73,44 @@ class NN(nn.Module):
         return [labels[int(i)] for i in idx]
 
 
+class linear_relu(NN):
+    def __init__(self):
+        super(linear_relu, self).__init__()
+        self.linear_reLU_stack = nn.Sequential(
+            nn.Linear(28 * 28, 512),
+            nn.ReLU(),
+            nn.Linear(512, 512),
+            nn.ReLU(),
+            nn.Linear(512, 10),
+        )
+
+    def forward(self, x):
+        x = self.flatten(x)
+        logits = self.linear_reLU_stack(x)
+        return logits
+
+
+class MLP(NN):
+    def __init__(self):
+        super(MLP, self).__init__()
+        self.mlp = nn.Sequential(
+            nn.Flatten(),
+            nn.LazyLinear(256),
+            nn.ReLU(),
+            nn.LazyLinear(10),
+        )
+
+    def forward(self, x):
+        x = self.flatten(x)
+        logits = self.mlp(x)
+        return logits
+
+
 class Classifier(nn.Module):
     """Base class for Classification Models"""
 
     def validation_step(self, batch):
-        Y_hat = self(*batch[:-1])  # * unpack elements of batch iterable
+        Y_hat = self(*batch[:-1])  # * operator to unpack elements of batch iterable
         self.plot("loss", self.loss(Y_hat, batch[-1]), train=False)
         self.plot("accuracy", self.accuracy(Y_hat, batch[-1]), train=False)
 
@@ -109,7 +142,7 @@ def training_loop(dataloader, model, lossfx, optimizer, device):
 
         if batch % 100 == 0:
             loss, current = loss.item(), batch * dataloader.batch_size + len(X)
-            print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
+            logging.info(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
 
 def test_loop(dataloader, model, lossfx, device):
@@ -135,7 +168,7 @@ def test_loop(dataloader, model, lossfx, device):
 
     test_loss /= n_batches
     correct /= size
-    print(
+    logging.info(
         f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n"
     )
 
@@ -144,7 +177,7 @@ def main(
     batch_size: int = 64,
     num_workers: int = 1,
     learning_rate: float = 1e-3,
-    epochs: int = 100,
+    epochs: int = 10,
 ):
 
     if torch.cuda.is_available():
@@ -152,7 +185,9 @@ def main(
     else:
         device = torch.device("cpu")
 
-    print(f"Using device: {device}")
+    logging.info(
+        f"\n Using device: {device} \n batch_size: {batch_size} \n num_workers: {num_workers} \n learning_rate: {learning_rate} \n epochs: {epochs} \n",
+    )
 
     data = NN(resize=(28, 28))
     # print(len(data.training_data))  # 60000
@@ -163,18 +198,23 @@ def main(
     # print(len(train_dataloader))    # 938 * 64 batches == 60,032
     # print(len(test_dataloader))     # 157 * 64 batches == 10,048
 
-    model = NN().to(device)
+    # TODO: cleaner way to specify model class
+    model = MLP().to(device)
     lossfx = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
-    for i in range(epochs):
-        print(f"Epoch {i+1}\n-------------------------------")
+    logging.info(
+        f"\n model: {model} \n lossfx: {lossfx} \n optimizer: {optimizer} \n",
+    )
+
+    for i in tqdm(range(epochs)):
+        logging.info(f"Epoch {i+1}\n-------------------------------")
         training_loop(train_dataloader, model, lossfx, optimizer, device)
         test_loop(test_dataloader, model, lossfx, device)
 
     torch.save(model.state_dict(), "model.pth")
 
-    print("Finished!")
+    logging.info("Finished!")
 
 
 if __name__ == "__main__":
