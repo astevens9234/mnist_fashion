@@ -88,6 +88,25 @@ class linear_relu(NN):
         x = self.flatten(x)
         logits = self.linear_reLU_stack(x)
         return logits
+    
+
+class dropout_relu(NN):
+    def __init__(self, layer1=.25, layer2=.25):
+        super(dropout_relu, self).__init__()
+        self.dropout_relu_stack = nn.Sequential(
+            nn.Linear(28 * 28, 512),
+            nn.ReLU(),
+            nn.Dropout(p=layer1),
+            nn.Linear(512, 512),
+            nn.ReLU(),
+            nn.Dropout(p=layer2),
+            nn.Linear(512, 10),
+        )
+
+    def forward(self, x):
+        x = self.flatten(x)
+        logits = self.dropout_relu_stack(x)
+        return logits
 
 
 class MLP(NN):
@@ -177,7 +196,7 @@ def main(
     batch_size: int = 64,
     num_workers: int = 1,
     learning_rate: float = 1e-3,
-    epochs: int = 10,
+    epochs: int = 100,
 ):
 
     if torch.cuda.is_available():
@@ -199,7 +218,7 @@ def main(
     # print(len(test_dataloader))     # 157 * 64 batches == 10,048
 
     # TODO: cleaner way to specify model class
-    model = MLP().to(device)
+    model = dropout_relu(layer1=.2, layer2=.2).to(device)
     lossfx = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
