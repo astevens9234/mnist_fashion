@@ -11,6 +11,8 @@ import warnings
 import torch
 import torchvision
 
+from vgg import VGG
+
 from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
@@ -236,7 +238,8 @@ def main(
     train_dataloader = NN.get_dataloader(data, train=True, batch_size=batch_size)
     test_dataloader = NN.get_dataloader(data, train=False, batch_size=batch_size)
 
-    model = LeNet().to(device)
+    # model = LeNet().to(device)
+    model = VGG().to(device)
     lossfx = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
