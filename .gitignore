@@ -5,3 +5,5 @@ model.pth
 logging.log
 LeNet.log
 VGG.log
+logs
+./logs

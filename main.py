@@ -11,12 +11,13 @@ import warnings
 import torch
 import torchvision
 
-from vgg import VGG
-
 from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+from src.mlp import MLP
+from src.nin import NIN
+from src.vgg import VGG
 
 warnings.simplefilter("ignore")
 logging.basicConfig(
@@ -111,22 +112,6 @@ class dropout_relu(NN):
         return logits
 
 
-class MLP(NN):
-    def __init__(self):
-        super(MLP, self).__init__()
-        self.mlp = nn.Sequential(
-            nn.Flatten(),
-            nn.LazyLinear(256),
-            nn.ReLU(),
-            nn.LazyLinear(10),
-        )
-
-    def forward(self, x):
-        x = self.flatten(x)
-        logits = self.mlp(x)
-        return logits
-
-
 class LeNet(NN):
     def __init__(self):
         super().__init__()
@@ -218,7 +203,7 @@ def test_loop(dataloader, model, lossfx, device):
 
 
 def main(
-    batch_size: int = 64,
+    batch_size: int = 128,
     num_workers: int = 1,
     learning_rate: float = 1e-3,
     epochs: int = 10,
@@ -233,13 +218,14 @@ def main(
         f"\n Using device: {device} \n batch_size: {batch_size} \n num_workers: {num_workers} \n learning_rate: {learning_rate} \n epochs: {epochs} \n",
     )
 
-    data = NN(resize=(28, 28))
+    data = NN(resize=(224, 224))
 
     train_dataloader = NN.get_dataloader(data, train=True, batch_size=batch_size)
     test_dataloader = NN.get_dataloader(data, train=False, batch_size=batch_size)
 
     # model = LeNet().to(device)
-    model = VGG().to(device)
+    # model = VGG().to(device)
+    model = NIN().to(device)
     lossfx = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
