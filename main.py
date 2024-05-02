@@ -18,6 +18,7 @@ from tqdm import tqdm
 from src.mlp import MLP
 from src.nin import NIN
 from src.vgg import VGG
+from src.googlenet import GoogLeNet
 
 warnings.simplefilter("ignore")
 logging.basicConfig(
@@ -207,6 +208,7 @@ def main(
     num_workers: int = 1,
     learning_rate: float = 1e-3,
     epochs: int = 10,
+    resize: tuple = (96, 96),
 ):
 
     if torch.cuda.is_available():
@@ -218,14 +220,14 @@ def main(
         f"\n Using device: {device} \n batch_size: {batch_size} \n num_workers: {num_workers} \n learning_rate: {learning_rate} \n epochs: {epochs} \n",
     )
 
-    data = NN(resize=(224, 224))
+    data = NN(resize=resize)
 
     train_dataloader = NN.get_dataloader(data, train=True, batch_size=batch_size)
     test_dataloader = NN.get_dataloader(data, train=False, batch_size=batch_size)
 
     # model = LeNet().to(device)
     # model = VGG().to(device)
-    model = NIN().to(device)
+    model = GoogLeNet().to(device)
     lossfx = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 

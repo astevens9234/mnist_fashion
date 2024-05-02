@@ -1,0 +1,166 @@
+root - INFO - 
+ Using device: cuda 
+ batch_size: 128 
+ num_workers: 1 
+ learning_rate: 0.001 
+ epochs: 10 
+
+root - INFO - 
+ model: NIN(
+  (net): Sequential(
+    (0): Sequential(
+      (0): LazyConv2d(0, 96, kernel_size=(11, 11), stride=(4, 4))
+      (1): ReLU()
+      (2): LazyConv2d(0, 96, kernel_size=(1, 1), stride=(1, 1))
+      (3): ReLU()
+      (4): LazyConv2d(0, 96, kernel_size=(1, 1), stride=(1, 1))
+      (5): ReLU()
+    )
+    (1): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (2): Sequential(
+      (0): LazyConv2d(0, 256, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+      (1): ReLU()
+      (2): LazyConv2d(0, 256, kernel_size=(1, 1), stride=(1, 1))
+      (3): ReLU()
+      (4): LazyConv2d(0, 256, kernel_size=(1, 1), stride=(1, 1))
+      (5): ReLU()
+    )
+    (3): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (4): Sequential(
+      (0): LazyConv2d(0, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU()
+      (2): LazyConv2d(0, 384, kernel_size=(1, 1), stride=(1, 1))
+      (3): ReLU()
+      (4): LazyConv2d(0, 384, kernel_size=(1, 1), stride=(1, 1))
+      (5): ReLU()
+    )
+    (5): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (6): Dropout(p=0.5, inplace=False)
+    (7): Sequential(
+      (0): LazyConv2d(0, 10, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU()
+      (2): LazyConv2d(0, 10, kernel_size=(1, 1), stride=(1, 1))
+      (3): ReLU()
+      (4): LazyConv2d(0, 10, kernel_size=(1, 1), stride=(1, 1))
+      (5): ReLU()
+    )
+    (8): AdaptiveAvgPool2d(output_size=(1, 1))
+    (9): Flatten(start_dim=1, end_dim=-1)
+  )
+) 
+ lossfx: CrossEntropyLoss() 
+ optimizer: Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    lr: 0.001
+    maximize: False
+    weight_decay: 0
+) 
+
+root - INFO - Epoch 1
+-------------------------------
+root - INFO - loss: 2.300361  [  128/60000]
+root - INFO - loss: 1.856168  [12928/60000]
+root - INFO - loss: 1.595156  [25728/60000]
+root - INFO - loss: 1.363109  [38528/60000]
+root - INFO - loss: 1.262195  [51328/60000]
+root - INFO - Test Error: 
+ Accuracy: 46.8%, Avg loss: 1.292572 
+
+root - INFO - Epoch 2
+-------------------------------
+root - INFO - loss: 1.493884  [  128/60000]
+root - INFO - loss: 1.116700  [12928/60000]
+root - INFO - loss: 0.749899  [25728/60000]
+root - INFO - loss: 0.665080  [38528/60000]
+root - INFO - loss: 0.735190  [51328/60000]
+root - INFO - Test Error: 
+ Accuracy: 79.4%, Avg loss: 0.567211 
+
+root - INFO - Epoch 3
+-------------------------------
+root - INFO - loss: 0.506362  [  128/60000]
+root - INFO - loss: 0.655022  [12928/60000]
+root - INFO - loss: 0.487352  [25728/60000]
+root - INFO - loss: 0.492766  [38528/60000]
+root - INFO - loss: 0.469500  [51328/60000]
+root - INFO - Test Error: 
+ Accuracy: 82.0%, Avg loss: 0.492226 
+
+root - INFO - Epoch 4
+-------------------------------
+root - INFO - loss: 0.699166  [  128/60000]
+root - INFO - loss: 0.356275  [12928/60000]
+root - INFO - loss: 0.349629  [25728/60000]
+root - INFO - loss: 0.498378  [38528/60000]
+root - INFO - loss: 0.477397  [51328/60000]
+root - INFO - Test Error: 
+ Accuracy: 83.5%, Avg loss: 0.431569 
+
+root - INFO - Epoch 5
+-------------------------------
+root - INFO - loss: 0.392249  [  128/60000]
+root - INFO - loss: 0.527314  [12928/60000]
+root - INFO - loss: 0.399191  [25728/60000]
+root - INFO - loss: 0.416121  [38528/60000]
+root - INFO - loss: 0.460780  [51328/60000]
+root - INFO - Test Error: 
+ Accuracy: 84.8%, Avg loss: 0.422890 
+
+root - INFO - Epoch 6
+-------------------------------
+root - INFO - loss: 0.317272  [  128/60000]
+root - INFO - loss: 0.321427  [12928/60000]
+root - INFO - loss: 0.357596  [25728/60000]
+root - INFO - loss: 0.256334  [38528/60000]
+root - INFO - loss: 0.332095  [51328/60000]
+root - INFO - Test Error: 
+ Accuracy: 85.9%, Avg loss: 0.378646 
+
+root - INFO - Epoch 7
+-------------------------------
+root - INFO - loss: 0.379072  [  128/60000]
+root - INFO - loss: 0.382439  [12928/60000]
+root - INFO - loss: 0.290513  [25728/60000]
+root - INFO - loss: 0.281199  [38528/60000]
+root - INFO - loss: 0.282712  [51328/60000]
+root - INFO - Test Error: 
+ Accuracy: 87.7%, Avg loss: 0.336953 
+
+root - INFO - Epoch 8
+-------------------------------
+root - INFO - loss: 0.307846  [  128/60000]
+root - INFO - loss: 0.274559  [12928/60000]
+root - INFO - loss: 0.312255  [25728/60000]
+root - INFO - loss: 0.215590  [38528/60000]
+root - INFO - loss: 0.373353  [51328/60000]
+root - INFO - Test Error: 
+ Accuracy: 88.1%, Avg loss: 0.332200 
+
+root - INFO - Epoch 9
+-------------------------------
+root - INFO - loss: 0.380775  [  128/60000]
+root - INFO - loss: 0.235587  [12928/60000]
+root - INFO - loss: 0.234703  [25728/60000]
+root - INFO - loss: 0.323266  [38528/60000]
+root - INFO - loss: 0.367383  [51328/60000]
+root - INFO - Test Error: 
+ Accuracy: 86.3%, Avg loss: 0.369003 
+
+root - INFO - Epoch 10
+-------------------------------
+root - INFO - loss: 0.303676  [  128/60000]
+root - INFO - loss: 0.265621  [12928/60000]
+root - INFO - loss: 0.396597  [25728/60000]
+root - INFO - loss: 0.360923  [38528/60000]
+root - INFO - loss: 0.296913  [51328/60000]
+root - INFO - Test Error: 
+ Accuracy: 88.9%, Avg loss: 0.317640 
+
+root - INFO - Finished!
