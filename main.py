@@ -1,8 +1,7 @@
 """Pytorch implimentation of the Fashion MNIST Classification Problem.
 
 For GPU enabled computation, install pytorch in the venv from:
-https://pytorch.org/get-started/locally/
-"""
+https://pytorch.org/get-started/locally/"""
 
 import logging
 import pdb
@@ -15,8 +14,6 @@ from torch import nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from src.mlp import MLP
-from src.nin import NIN
 from src.vgg import VGG
 from src.googlenet import GoogLeNet
 
@@ -75,65 +72,6 @@ class NN(nn.Module):
             "ankle boot",
         ]
         return [labels[int(i)] for i in idx]
-
-
-class linear_relu(NN):
-    def __init__(self):
-        super(linear_relu, self).__init__()
-        self.linear_reLU_stack = nn.Sequential(
-            nn.Linear(28 * 28, 512),
-            nn.ReLU(),
-            nn.Linear(512, 512),
-            nn.ReLU(),
-            nn.Linear(512, 10),
-        )
-
-    def forward(self, x):
-        x = self.flatten(x)
-        logits = self.linear_reLU_stack(x)
-        return logits
-
-
-class dropout_relu(NN):
-    def __init__(self, layer1=0.25, layer2=0.25):
-        super(dropout_relu, self).__init__()
-        self.dropout_relu_stack = nn.Sequential(
-            nn.Linear(28 * 28, 512),
-            nn.ReLU(),
-            nn.Dropout(p=layer1),
-            nn.Linear(512, 512),
-            nn.ReLU(),
-            nn.Dropout(p=layer2),
-            nn.Linear(512, 10),
-        )
-
-    def forward(self, x):
-        x = self.flatten(x)
-        logits = self.dropout_relu_stack(x)
-        return logits
-
-
-class LeNet(NN):
-    def __init__(self):
-        super().__init__()
-        # Modified with max pooling & ReLU.
-        self.net = nn.Sequential(
-            nn.LazyConv2d(out_channels=6, kernel_size=5, padding=2),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.LazyConv2d(out_channels=16, kernel_size=5),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.Flatten(),
-            nn.LazyLinear(out_features=120),
-            nn.ReLU(),
-            nn.LazyLinear(out_features=84),
-            nn.ReLU(),
-            nn.LazyLinear(out_features=10),
-        )
-
-    def forward(self, x):
-        return self.net(x)
 
 
 class Classifier(nn.Module):
@@ -208,7 +146,7 @@ def main(
     num_workers: int = 1,
     learning_rate: float = 1e-3,
     epochs: int = 10,
-    resize: tuple = (96, 96),
+    resize: tuple = (28, 28),
 ):
 
     if torch.cuda.is_available():

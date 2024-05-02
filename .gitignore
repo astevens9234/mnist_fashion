@@ -6,5 +6,6 @@ logging.log
 LeNet.log
 VGG.log
 mlp.log
+NiN.log
 GoogLeNet.log
 __pycache__
