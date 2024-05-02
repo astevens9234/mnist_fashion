@@ -1,6 +1,6 @@
 """Pytorch implimentation of the Fashion MNIST Classification Problem.
 
-For GPU enabled computation, install pytorch in the venv from:
+For GPU enabled computation, install pytorch in the virtual environment from:
 https://pytorch.org/get-started/locally/"""
 
 import logging
