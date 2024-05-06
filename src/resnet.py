@@ -1,6 +1,6 @@
 """Implimentation of ResNet.
 
-This architecture is pretty complicated. See docs at:
+This architecture is pretty complicated. See paper at:
 https://arxiv.org/abs/1512.03385 """
 
 from torch import nn
@@ -8,7 +8,7 @@ from torch.nn import functional as F
 
 
 class ResNet18(nn.Module):
-    def __init__(self, arch, num_classes=10):
+    def __init__(self, arch: tuple, num_classes: int = 10):
         """18 Layer ResNet Model.
 
         Args:
