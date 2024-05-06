@@ -7,5 +7,6 @@ LeNet.log
 VGG.log
 mlp.log
 NiN.log
+resnet18.log
 GoogLeNet.log
 __pycache__
