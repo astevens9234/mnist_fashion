@@ -9,4 +9,5 @@ mlp.log
 NiN.log
 resnet18.log
 GoogLeNet.log
+DenseNet.log
 __pycache__
