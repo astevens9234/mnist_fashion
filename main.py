@@ -16,6 +16,7 @@ from tqdm import tqdm
 
 from src.vgg import VGG
 from src.googlenet import GoogLeNet
+from src.resnet import ResNet18
 
 warnings.simplefilter("ignore")
 logging.basicConfig(
@@ -165,7 +166,7 @@ def main(
 
     # model = LeNet().to(device)
     # model = VGG().to(device)
-    model = GoogLeNet().to(device)
+    model = ResNet18(arch=((2, 64), (2, 128), (2, 256), (2, 512))).to(device)
     lossfx = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
